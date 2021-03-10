@@ -1,6 +1,9 @@
 body {
   padding: 0;
   text-align: center;
+  display: flex;
+  justify-content: space-between;
+ 
 }
 
 .game-intro {
@@ -32,7 +35,15 @@ body button {
   margin-bottom: 20px;
 }
 
-#game-board {
-    float: left;
-    padding: 20px 0px;
+#game-intro{
+  position: relative;
 }
+
+#game-board {
+    position: absolute; 
+    right: 450px; 
+    bottom: 220px;
+    padding: 20px 0px;
+    visibility: hidden;
+  }
+
