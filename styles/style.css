@@ -1,9 +1,6 @@
 body {
   padding: 0;
   text-align: center;
-  display: flex;
-  justify-content: space-between;
- 
 }
 
 .game-intro {
@@ -35,15 +32,48 @@ body button {
   margin-bottom: 20px;
 }
 
-#game-intro{
-  position: relative;
+#game-board {
+    float: left;
+    padding: 20px 0px;
+    position: relative;
+    z-index: 1;
 }
 
-#game-board {
-    position: absolute; 
-    right: 450px; 
-    bottom: 220px;
-    padding: 20px 0px;
-    visibility: hidden;
-  }
+#canvas {
+  background-image: url("../images/road.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  visibility: hidden;
+  
+}
 
+#score{
+  color: black;
+  font-weight: bold;
+  font-size: 20px;
+  position: absolute;
+  top: 30px;
+  left: 15px;
+  visibility: hidden;
+  border: 4px solid black;
+  padding: 8px;
+  background-color: white;
+  opacity: 0.6;
+  border-radius: 10px;
+  z-index: 2;
+}
+
+
+
+#game-over{
+  background-color: black;
+  position: absolute;
+  top: 150px;
+  left: 50px;
+  color: white;
+  font-size: 50px;
+  visibility: hidden;
+  font-weight: bold;
+  padding:  80px;
+
+} 

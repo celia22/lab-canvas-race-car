@@ -1,78 +1,132 @@
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-
-
-window.onload = () => { 
-  let button = document.getElementById('start-button')
-  button.onclick = function() {
-    console.log('startGame button is clicked');
+window.onload = () => {
+  document.getElementById('start-button').onclick = () => {
     startGame();
-  }    
+  };
+
+  const board = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+
+
+  let puntuacion= document.getElementById("score")
+
+  function drawBoard() {
+    document.getElementById("canvas").style.visibility = "visible";
+    document.getElementById("score").style.visibility = "visible";
+   }
+
+ 
+  let car = {
+    x: 225,
+    y: 550,
+    w: 52,
+    h: 106,
+    score: 0,
+    moveLeft: function () { 
+      if(this.x-23 >= 80 && this.x-23 <= 380){
+        this.x-=40;
+      }      
+    },
+    moveRight: function () {
+      if(this.x+23 >= 80 && this.x+23 <= 380){
+        this.x+=40;
+      } 
+    }
+  };
+
+  const carImg = new Image();
+  carImg.src = './images/car.png';
   
-};
-
-function startGame() {
-  document.getElementById("road").style.visibility = "visible";  
-
-};
-
-
-class Car {
-  constructor() {
-    this.x = 250;
-    this.y = 250;   
-    const img = new Image();
-    img.addEventListener('load', () => {
-      this.img = img;
-      this.draw();
+  function drawCar(){
+    ctx.drawImage(carImg, car.x, car.y, car.w, car.h);
+  }
+  
+    document.addEventListener('keydown', event => {
+          
+    switch (event.code) {
+      case "ArrowLeft":
+        car.moveLeft();
+        break;
+      case "ArrowRight":
+        car.moveRight();
+        break;
+      }
     });
-    img.src = "./images/car.png";
+  
+
+  let obstacle = {
+    x: 80,
+    y: 0,
+    w: 100,
+    h: 20,
+  };
+  
+
+  function drawObstacle () {
+    ctx.fillStyle = 'red';
+    ctx.fillRect(obstacle.x, obstacle.y, obstacle.w, obstacle.h);
   }
-  moveLeft() {
-    this.x -= 25;
-  }
-  moveRight() {
-    this.x += 25;
-  }
-  draw() {
-    ctx.drawImage(this.img, this.x, this.y, 150, 150);
-  }
-}
+
+  function moveObstacles (){  
+    if (isCollide() === true){
+      return
+   }  
+    
+    if(obstacle.y >= 690){
+      obstacle.x = 80 +Math.random()*300;
+      obstacle.w = 110 +Math.random()*150;
+      car.score++
+    }
+    obstacle.y = (obstacle.y + 10) % 700;
+
+  };
+  
+
+  function isCollide() {
+     if (car.x < obstacle.x + obstacle.w &&
+      car.x + car.w/2 > obstacle.x &&
+      car.y < obstacle.y + obstacle.h &&
+      car.y + car.h > obstacle.y) {
+      //  console.log("is collide is called"); 
+      showGameOver()
+      return true
+    }    
+  };
 
 
-/*
-class blueCar extends Car {
-  constructor(x,y) {
+  function showGameOver(){
+    document.getElementById("game-over").style.visibility = "visible"
+
+  }
+ 
+
+  function clearBoard() {
+    ctx.clearRect(0,0,500,700);
+  }
+
+  function showScore(){
+    document.getElementById("score").innerHTML = "Score: " + car.score;
+  }
+
+  function update() {
+    clearBoard();    
+    drawCar();
+    drawObstacle();
+    moveObstacles();   
+    showScore();
+    window.requestAnimationFrame(update);
       
   }
 
-  draw() {
-    this.img = new Image();
-    this.img.src = "./images/car.png";
-    this.ctx.drawImage(this.img,this.x, this.y, 150, 150);
+  function startGame() {
+    drawBoard();
+      
   }
-}
-*/
 
-
-
-document.addEventListener('keydown', event => {
-  console.log("eventL")
-  switch (event.code) {   
-    case "ArrowLeft":     
-      blueCar.moveLeft();
-      console.log('left');
-      break;
-    case "ArrowRigth":
-      blueCar.moveRight();
-      console.log('right');
-      break;
-  }
-  updateCanvas();
-});
-
-function updateCanvas() {
-  ctx.clearRect(0, 0, 500, 700);
-  blueCar.draw();
+  window.requestAnimationFrame(update);
 };
+
+
+
+
+
 
